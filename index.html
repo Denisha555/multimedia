@@ -34,7 +34,8 @@
             justify-content: center;
             flex-direction: column;
             gap: 16px;
-            padding-left: 800px;
+            padding-left: 750px;
+            padding-top: 350px;
             box-sizing: border-box;
             color: #fff;
             font: 24px sans-serif;
@@ -42,6 +43,7 @@
 
         .video-overlay.visible {
             display: flex;
+            animation: overlay-fade-in 500ms ease-out both;
         }
 
         .video-overlay button {
@@ -52,6 +54,27 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 16px;
+            animation: start-button-enter 600ms 150ms ease-out both;
+        }
+
+        @keyframes overlay-fade-in {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes start-button-enter {
+            from {
+                opacity: 0;
+                transform: translateY(18px) scale(0.94);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
     </style>
 </head>
