@@ -26,7 +26,6 @@
             height: 100vh;
         }
 
-        /* Lapisan khusus tombol; terpisah dari styling pemutar video. */
         .start-overlay {
             position: absolute;
             inset: 0;
@@ -35,56 +34,98 @@
             justify-content: center;
             flex-direction: column;
             gap: 16px;
-            padding-left: 750px;
-            padding-top: 350px;
-            box-sizing: border-box;
-            color: #fff;
-            font: 24px sans-serif;
         }
 
         .start-overlay.visible {
             display: flex;
-            animation: overlay-fade-in 500ms ease-out both;
         }
 
         .start-button {
-            width: 490px;
-            height: 200px;
-            margin-left: 130px;
-            margin-bottom: 110px;
+            width: 500px;
+            height: 150px;
+            margin-top: 230px;
+            margin-left:880px;
             color: transparent;
-            background: url('./1/mulai.png') center/contain no-repeat;
             border: 0;
             border-radius: 12px;
             cursor: pointer;
-            transition: transform 0.2s ease, filter 0.2s ease;
-            animation: start-button-enter 600ms 150ms ease-out both;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: transparent;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('./1/mulai.png');
+            opacity:0;
         }
 
-        .start-button:hover {
-            transform: scale(1.03);
-            filter: brightness(1.08);
+        .apple-button {
+            display: none;
+            flex-shrink: 0;
+            width: 440px;
+            height: 400px;
+            margin-bottom: 90px;
+            margin-left:790px;
+            color: transparent;
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: transparent;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('./2/apel.png');
+            opacity: 0;
         }
 
-        @keyframes overlay-fade-in {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+        .orange-button {
+            display: none;
+            flex-shrink: 0;
+            width: 440px;
+            height: 400px;
+            margin-top: 280px;
+            margin-right:680px;
+            color: transparent;
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: transparent;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('./2/jeruk.png');
+            opacity: 0;
         }
 
-        @keyframes start-button-enter {
-            from {
-                opacity: 0;
-                transform: translateY(18px) scale(0.94);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+        /* Setelah video kedua, hanya pilihan Apel dan Jeruk yang ditampilkan. */
+        .start-overlay.choice-mode {
+            flex-direction: row;
         }
+
+        .start-overlay.choice-mode .start-button {
+            display: none;
+        }
+
+        .start-overlay.choice-mode .apple-button,
+        .start-overlay.choice-mode .orange-button {
+            display: block;
+        }
+
+        .orange-audio {
+            display: none;
+            position: absolute;
+            bottom: 32px;
+            width: min(90vw, 360px);
+        }
+
+        .orange-audio.visible {
+            display: block;
+        }
+
     </style>
 </head>
 <body>
@@ -95,6 +136,11 @@
 
         <div class="start-overlay" id="videoOverlay">
             <button id="nextButton" class="start-button" type="button"></button>
+            <button id="appleButton" class="apple-button" type="button"></button>
+            <button id="orangeButton" class="orange-button" type="button"></button>
+            <audio id="orangeAudio" class="orange-audio" controls>
+                <source src="./2/jeruk.mp3" type="audio/mpeg">
+            </audio>
         </div>
     </div>
 
@@ -103,16 +149,42 @@
         const videoSource = video.querySelector('source');
         const videoOverlay = document.getElementById('videoOverlay');
         const nextButton = document.getElementById('nextButton');
+        const appleButton = document.getElementById('appleButton');
+        const orangeButton = document.getElementById('orangeButton');
+        const orangeAudio = document.getElementById('orangeAudio');
+        let videoSaatIni = 1;
 
         video.addEventListener('ended', () => {
-            videoOverlay.classList.add('visible');
+            if (videoSaatIni === 1) {
+                videoOverlay.classList.remove('choice-mode');
+                videoOverlay.classList.add('visible');
+            } else if (videoSaatIni === 2) {
+                videoOverlay.classList.add('choice-mode', 'visible');
+            }
         });
 
         nextButton.addEventListener('click', () => {
-            videoSource.src = './2/video.mp4';
+            if (videoSaatIni === 1) {
+                videoSource.src = './2/video.mp4';
+                videoSaatIni = 2;
+            }
+
             videoOverlay.classList.remove('visible');
             video.load();
             video.play();
+        });
+
+        appleButton.addEventListener('click', () => {
+            videoSource.src = './3/video.mp4';
+            videoSaatIni = 3;
+            videoOverlay.classList.remove('choice-mode', 'visible');
+            video.load();
+            video.play();
+        });
+
+        orangeButton.addEventListener('click', () => {
+            orangeAudio.classList.add('visible');
+            orangeAudio.play();
         });
     </script>
 </body>
