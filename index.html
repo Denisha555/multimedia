@@ -41,18 +41,18 @@
         }
 
         .start-button {
-            width: 500px;
-            height: 150px;
+            width: 22%;
+            height: 15%;
             position: absolute;
-            top: 55%;
-            left:61%;
-            color: transparent;
+            top: 60.5%;
+            left:50%;
+            color: white;
             border: 0;
             border-radius: 12px;
             cursor: pointer;
             appearance: none;
             -webkit-appearance: none;
-            background-color: transparent;
+            background-color: white;
             background-position: center;
             background-size: contain;
             background-repeat: no-repeat;
@@ -64,11 +64,11 @@
             display: none;
             flex-shrink: 0;
             position: absolute;
-            left: 53.5%;
+            left: 54%;
             top: 35%;
-            width: 440px;
-            height: 150px;
-            color: transparent;
+            width: 25%;
+            height: 18%;
+            color: white;
             border: 0;
             border-radius: 12px;
             cursor: pointer;
@@ -86,11 +86,11 @@
             display: none;
             flex-shrink: 0;
             position: absolute;
-            width: 435px;
-            height: 150px;
+            width: 25%;
+            height: 18%;
             left: 54%;
             top: 59%;
-            color: transparent;
+            color: white;
             border: 0;
             border-radius: 12px;
             cursor: pointer;
@@ -102,6 +102,50 @@
             background-repeat: no-repeat;
             background-image: url('./2/jeruk.png');
             opacity: 0;
+        }
+
+        .apple-button2 {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            left: 55%;
+            top: 43%;
+            width: 25%;
+            height: 18%;
+            color: white;
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: white;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('./3/apel.png');
+            /* opacity: 0; */
+        }
+
+        .orange-button2 {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            width: 25%;
+            height: 18%;
+            left: 54%;
+            top: 65%;
+            color: white;
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: white;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('./3/jeruk.png');
+            /* opacity: 0; */
         }
 
         .start-overlay.choice-mode {
@@ -117,15 +161,17 @@
             display: block;
         }
 
-        .orange-audio {
-            display: none;
-            position: absolute;
-            bottom: 32px;
-            width: min(90vw, 360px);
+        .start-overlay.choice-mode-3 .apple-button2,
+        .start-overlay.choice-mode-3 .orange-button2 {
+            display: block;
         }
 
-        .orange-audio.visible {
-            display: block;
+        .orange-audio {
+            display: none;
+        }
+
+        .apple-button {
+            display: none;
         }
 
     </style>
@@ -140,8 +186,13 @@
             <button id="nextButton" class="start-button" type="button"></button>
             <button id="appleButton" class="apple-button" type="button"></button>
             <button id="orangeButton" class="orange-button" type="button"></button>
-            <audio id="orangeAudio" class="orange-audio" controls>
-                <!-- <source src="./2/jeruk.mp3" type="audio/mpeg"> -->
+            <button id="appleButton2" class="apple-button2" type="button"></button>
+            <button id="orangeButton2" class="orange-button2" type="button"></button>
+            <audio id="orangeAudio" class="orange-audio">
+                <source src="./2/audio.mp3" type="audio/mpeg">
+            </audio>
+            <audio id="appleAudio" class="apple-audio">
+                <source src="./3/audio.mp3" type="audio/mpeg">
             </audio>
         </div>
     </div>
@@ -153,15 +204,20 @@
         const nextButton = document.getElementById('nextButton');
         const appleButton = document.getElementById('appleButton');
         const orangeButton = document.getElementById('orangeButton');
+        const appleButton2 = document.getElementById('appleButton2');
+        const orangeButton2 = document.getElementById('orangeButton2');
         const orangeAudio = document.getElementById('orangeAudio');
+        const appleAudio = document.getElementById('appleAudio');
         let videoSaatIni = 1;
 
         video.addEventListener('ended', () => {
             if (videoSaatIni === 1) {
-                videoOverlay.classList.remove('choice-mode');
+                videoOverlay.classList.remove('choice-mode', 'choice-mode-3');
                 videoOverlay.classList.add('visible');
             } else if (videoSaatIni === 2) {
                 videoOverlay.classList.add('choice-mode', 'visible');
+            } else if (videoSaatIni === 3) {
+                videoOverlay.classList.add('choice-mode-3', 'visible');
             }
         });
 
@@ -179,14 +235,25 @@
         appleButton.addEventListener('click', () => {
             videoSource.src = './3/video.mp4';
             videoSaatIni = 3;
-            videoOverlay.classList.remove('choice-mode', 'visible');
+            videoOverlay.classList.remove('choice-mode', 'choice-mode-3', 'visible');
             video.load();
             video.play();
         });
 
         orangeButton.addEventListener('click', () => {
-            orangeAudio.classList.add('visible');
             orangeAudio.play();
+        });
+
+        orangeButton2.addEventListener('click', () => {
+            videoSource.src = './4/video.mp4';
+            videoSaatIni = 4;
+            videoOverlay.classList.remove('choice-mode', 'choice-mode-3', 'visible');
+            video.load();
+            video.play();
+        });
+
+        appleButton2.addEventListener('click', () => {
+            appleAudio.play();
         });
     </script>
 </body>
