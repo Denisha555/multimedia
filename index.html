@@ -15,8 +15,8 @@
 
         .video-player {
             display: block;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             object-fit: contain;
         }
 
@@ -24,6 +24,19 @@
             position: relative;
             width: 100vw;
             height: 100vh;
+            overflow: hidden;
+        }
+
+        /* videoArea = area video yang BENAR-BENAR tampil di layar
+           (sudah memperhitungkan letterbox/pillarbox dari object-fit:contain).
+           Semua tombol diposisikan relatif terhadap div ini, bukan terhadap
+           seluruh layar, jadi persen posisinya konsisten di HP maupun laptop. */
+        .video-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
 
         .start-overlay {
@@ -45,7 +58,7 @@
             height: 15%;
             position: absolute;
             top: 60.5%;
-            left:50%;
+            left: 50%;
             color: white;
             border: 0;
             border-radius: 12px;
@@ -57,7 +70,7 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-image: url('./1/mulai.png');
-            opacity:0;
+            opacity: 0;
         }
 
         .apple-button {
@@ -169,37 +182,38 @@
         .orange-audio {
             display: none;
         }
-
-        .apple-button {
-            display: none;
-        }
-
     </style>
 </head>
 <body>
-    <div class="video-wrapper">
+    <div class="video-wrapper" id="videoWrapper">
         <video id="video" class="video-player" controls autoplay playsinline>
             <source src="./1/video.mp4" type="video/mp4">
         </video>
 
-        <div class="start-overlay" id="videoOverlay">
-            <button id="nextButton" class="start-button" type="button"></button>
-            <button id="appleButton" class="apple-button" type="button"></button>
-            <button id="orangeButton" class="orange-button" type="button"></button>
-            <button id="appleButton2" class="apple-button2" type="button"></button>
-            <button id="orangeButton2" class="orange-button2" type="button"></button>
-            <audio id="orangeAudio" class="orange-audio">
-                <source src="./2/audio.mp3" type="audio/mpeg">
-            </audio>
-            <audio id="appleAudio" class="apple-audio">
-                <source src="./3/audio.mp3" type="audio/mpeg">
-            </audio>
+        <!-- videoArea dihitung ulang lewat JS supaya ukuran & posisinya
+             persis menutupi gambar video yang tampil (bukan seluruh layar) -->
+        <div class="video-area" id="videoArea">
+            <div class="start-overlay" id="videoOverlay">
+                <button id="nextButton" class="start-button" type="button"></button>
+                <button id="appleButton" class="apple-button" type="button"></button>
+                <button id="orangeButton" class="orange-button" type="button"></button>
+                <button id="appleButton2" class="apple-button2" type="button"></button>
+                <button id="orangeButton2" class="orange-button2" type="button"></button>
+                <audio id="orangeAudio" class="orange-audio">
+                    <source src="./2/audio.mp3" type="audio/mpeg">
+                </audio>
+                <audio id="appleAudio" class="apple-audio">
+                    <source src="./3/audio.mp3" type="audio/mpeg">
+                </audio>
+            </div>
         </div>
     </div>
 
     <script>
         const video = document.getElementById('video');
         const videoSource = video.querySelector('source');
+        const videoWrapper = document.getElementById('videoWrapper');
+        const videoArea = document.getElementById('videoArea');
         const videoOverlay = document.getElementById('videoOverlay');
         const nextButton = document.getElementById('nextButton');
         const appleButton = document.getElementById('appleButton');
@@ -209,6 +223,48 @@
         const orangeAudio = document.getElementById('orangeAudio');
         const appleAudio = document.getElementById('appleAudio');
         let videoSaatIni = 1;
+
+        // Menghitung ulang posisi & ukuran videoArea supaya PERSIS
+        // menutupi area video yang tampil di layar (efek object-fit: contain
+        // dihitung manual di sini), lalu overlay tombol mengikuti area ini.
+        function updateVideoArea() {
+            const vw = video.videoWidth;
+            const vh = video.videoHeight;
+            if (!vw || !vh) return; // metadata video belum siap
+
+            const cw = videoWrapper.clientWidth;
+            const ch = videoWrapper.clientHeight;
+
+            const videoRatio = vw / vh;
+            const containerRatio = cw / ch;
+
+            let renderWidth, renderHeight, offsetX, offsetY;
+
+            if (containerRatio > videoRatio) {
+                // Layar lebih "lebar" dari video -> ada bar hitam kiri-kanan
+                renderHeight = ch;
+                renderWidth = ch * videoRatio;
+                offsetX = (cw - renderWidth) / 2;
+                offsetY = 0;
+            } else {
+                // Layar lebih "tinggi/kurus" dari video -> ada bar hitam atas-bawah
+                renderWidth = cw;
+                renderHeight = cw / videoRatio;
+                offsetX = 0;
+                offsetY = (ch - renderHeight) / 2;
+            }
+
+            videoArea.style.left = offsetX + 'px';
+            videoArea.style.top = offsetY + 'px';
+            videoArea.style.width = renderWidth + 'px';
+            videoArea.style.height = renderHeight + 'px';
+        }
+
+        video.addEventListener('loadedmetadata', updateVideoArea);
+        window.addEventListener('resize', updateVideoArea);
+        window.addEventListener('orientationchange', updateVideoArea);
+        // Jaga-jaga kalau metadata sudah ready duluan sebelum listener terpasang
+        updateVideoArea();
 
         video.addEventListener('ended', () => {
             if (videoSaatIni === 1) {
