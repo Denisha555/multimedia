@@ -158,7 +158,7 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-image: url('./3/jeruk.png');
-            /* opacity: 0; */
+            opacity: 0;
         }
 
         .start-overlay.choice-mode {
@@ -274,7 +274,7 @@
                 videoOverlay.classList.add('choice-mode', 'visible');
             } else if (videoSaatIni === 3) {
                 videoOverlay.classList.add('choice-mode-3', 'visible');
-            }
+            } 
         });
 
         nextButton.addEventListener('click', () => {
@@ -311,6 +311,8 @@
         appleButton2.addEventListener('click', () => {
             appleAudio.play();
         });
+
+
     </script>
 </body>
 </html>
