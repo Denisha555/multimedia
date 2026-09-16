@@ -20,6 +20,13 @@
             object-fit: contain;
         }
 
+        .video-player::-webkit-media-controls,
+        .video-player::-webkit-media-controls-panel,
+        .video-player::-webkit-media-controls-start-playback-button {
+            display: none !important;
+            -webkit-appearance: none !important;
+        }
+
         .video-wrapper {
             position: relative;
             width: 100vw;
@@ -270,8 +277,38 @@
     </style>
 </head>
 <body>
+    <div id="tapToStart" style="
+        position: fixed; inset: 0; z-index: 999;
+        background: rgba(0, 0, 0, 0.55);
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+    ">
+        <div id="startPlayButton" style="
+            width: clamp(70px, 18vw, 120px);
+            height: clamp(70px, 18vw, 120px);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.25);
+            display: flex; align-items: center; justify-content: center;
+            animation: startPulse 1.6s ease-in-out infinite;
+        ">
+            <div style="
+                width: 0; height: 0;
+                border-top: clamp(14px, 4vw, 24px) solid transparent;
+                border-bottom: clamp(14px, 4vw, 24px) solid transparent;
+                border-left: clamp(22px, 6vw, 38px) solid rgb(127, 127, 128);
+                margin-left: 6px;
+            "></div>
+        </div>
+        <style>
+            @keyframes startPulse {
+                0%, 100% { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.25); }
+                50% { box-shadow: 0 0 0 16px rgba(255, 255, 255, 0.1); }
+            }
+        </style>
+    </div>
     <div class="video-wrapper" id="videoWrapper">
-        <video id="video" class="video-player" autoplay playsinline>
+        <video id="video" class="video-player" playsinline webkit-playsinline disablePictureInPicture controlsList="nodownload noplaybackrate">
             <source src="./1/video.mp4" type="video/mp4">
         </video>
 
@@ -301,6 +338,7 @@
     </div>
 
     <script>
+        const tapToStart = document.getElementById('tapToStart');
         const video = document.getElementById('video');
         const videoSource = video.querySelector('source');
         const videoWrapper = document.getElementById('videoWrapper');
@@ -430,6 +468,13 @@
         window.addEventListener('resize', updateVideoArea);
         window.addEventListener('orientationchange', updateVideoArea);
         updateVideoArea();
+
+        tapToStart.addEventListener('click', () => {
+            tapToStart.style.display = 'none';
+            video.play().catch((err) => {
+                console.error('Video gagal diputar:', err);
+            });
+        }, { once: true });
 
         video.addEventListener('ended', () => {
             if (videoSaatIni === 1) {
