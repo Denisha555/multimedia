@@ -27,10 +27,6 @@
             overflow: hidden;
         }
 
-        /* videoArea = area video yang BENAR-BENAR tampil di layar
-           (sudah memperhitungkan letterbox/pillarbox dari object-fit:contain).
-           Semua tombol diposisikan relatif terhadap div ini, bukan terhadap
-           seluruh layar, jadi persen posisinya konsisten di HP maupun laptop. */
         .video-area {
             position: absolute;
             top: 0;
@@ -161,6 +157,79 @@
             opacity: 0;
         }
 
+        /* Tombol drag: apel & jeruk (target: drag ke drop zone) */
+        .apple-button3 {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            width: 48.5%;
+            height: 16%;
+            top: 58%;
+            left: 7%;
+            border: 3px solid white;
+            background-color: rgb(0, 182, 0);
+            border-radius: 12px;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: grab;
+            /* WAJIB: tanpa ini, gesture drag di HP akan diganggu/dibatalkan
+               oleh scroll bawaan browser */
+            touch-action: none;
+            z-index: 10;
+        }
+
+        .orange-button3 {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            width: 36.5%;
+            height: 16%;
+            top: 58%;
+            left: 56%;
+            border: 3px solid white;
+            background-color: rgb(0, 182, 0);
+            border-radius: 12px;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: grab;
+            touch-action: none;
+            z-index: 10;
+        }
+
+        .apple-button3.dragging,
+        .orange-button3.dragging {
+            cursor: grabbing;
+            z-index: 20;
+            transition: none;
+        }
+
+        /* Animasi halus saat snap-back ke posisi semula (kalau salah drop) */
+        .apple-button3.snap-back,
+        .orange-button3.snap-back {
+            transition: left 0.3s ease, top 0.3s ease;
+        }
+
+        .drop-zone {
+            display: none;
+            position: absolute;
+            border: 2px transparent; 
+            box-sizing: border-box;
+        }
+
+        .apple-drop-zone {
+            top: 29%;
+            left: 6.5%;
+            width: 50%;
+            height: 22%;
+        }
+
+        .orange-drop-zone {
+            top: 29%;
+            left: 55.5%;
+            width: 38%;
+            height: 22%;
+        }
+
         .start-overlay.choice-mode {
             flex-direction: row;
         }
@@ -179,8 +248,22 @@
             display: block;
         }
 
-        .orange-audio {
+        .true-audio {
             display: none;
+        }
+
+        .false-audio {
+            display: none;
+        }
+
+        .start-overlay.choice-mode-4 .apple-button3,
+        .start-overlay.choice-mode-4 .orange-button3 {
+            display: block;
+        }
+
+        .start-overlay.choice-mode-4 .apple-drop-zone,
+        .start-overlay.choice-mode-4 .orange-drop-zone {
+            display: block;
         }
     </style>
 </head>
@@ -190,8 +273,6 @@
             <source src="./1/video.mp4" type="video/mp4">
         </video>
 
-        <!-- videoArea dihitung ulang lewat JS supaya ukuran & posisinya
-             persis menutupi gambar video yang tampil (bukan seluruh layar) -->
         <div class="video-area" id="videoArea">
             <div class="start-overlay" id="videoOverlay">
                 <button id="nextButton" class="start-button" type="button"></button>
@@ -199,12 +280,20 @@
                 <button id="orangeButton" class="orange-button" type="button"></button>
                 <button id="appleButton2" class="apple-button2" type="button"></button>
                 <button id="orangeButton2" class="orange-button2" type="button"></button>
-                <audio id="orangeAudio" class="orange-audio">
-                    <source src="./2/audio.mp3" type="audio/mpeg">
+                <audio id="trueAudio" class="true-audio">
+                    <source src="true_audio.mp3" type="audio/mpeg">
                 </audio>
-                <audio id="appleAudio" class="apple-audio">
-                    <source src="./3/audio.mp3" type="audio/mpeg">
+                <audio id="falseAudio" class="false-audio">
+                    <source src="false_audio.mp3" type="audio/mpeg">
                 </audio>
+
+                <!-- Drop zone (kotak target) -->
+                <div id="appleDropZone" class="drop-zone apple-drop-zone"></div>
+                <div id="orangeDropZone" class="drop-zone orange-drop-zone"></div>
+
+                <!-- Tombol yang bisa di-drag -->
+                <button id="appleButton3" class="apple-button3" type="button">APEL</button>
+                <button id="orangeButton3" class="orange-button3" type="button">JERUK</button>
             </div>
         </div>
     </div>
@@ -222,15 +311,92 @@
         const orangeButton2 = document.getElementById('orangeButton2');
         const orangeAudio = document.getElementById('orangeAudio');
         const appleAudio = document.getElementById('appleAudio');
+        const appleButton3 = document.getElementById('appleButton3');
+        const orangeButton3 = document.getElementById('orangeButton3');
+        const appleDropZone = document.getElementById('appleDropZone');
+        const orangeDropZone = document.getElementById('orangeDropZone');
+        const trueAudio = document.getElementById('trueAudio');
+        const falseAudio = document.getElementById('falseAudio');
         let videoSaatIni = 1;
 
-        // Menghitung ulang posisi & ukuran videoArea supaya PERSIS
-        // menutupi area video yang tampil di layar (efek object-fit: contain
-        // dihitung manual di sini), lalu overlay tombol mengikuti area ini.
+        // ===== DRAG AND DROP =====
+        // Setiap tombol draggable dipasangkan dengan satu drop zone (targetZone)
+        // dan satu audio yang dimainkan kalau berhasil di-drop di zona itu.
+        function makeDraggable(el, targetZone, onCorrectDrop) {
+            let offsetX = 0, offsetY = 0, isDragging = false;
+            let startLeft = '', startTop = '';
+
+            el.addEventListener('pointerdown', (e) => {
+                isDragging = true;
+                el.classList.add('dragging');
+                el.classList.remove('snap-back');
+                el.setPointerCapture(e.pointerId);
+
+                // Simpan posisi awal (dalam px, relatif ke videoArea) untuk snap-back
+                const areaRect = videoArea.getBoundingClientRect();
+                const rect = el.getBoundingClientRect();
+                startLeft = (rect.left - areaRect.left) + 'px';
+                startTop = (rect.top - areaRect.top) + 'px';
+
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+
+                el.style.position = 'absolute';
+                el.style.left = startLeft;
+                el.style.top = startTop;
+                el.style.right = 'auto';
+            });
+
+            el.addEventListener('pointermove', (e) => {
+                if (!isDragging) return;
+                const areaRect = videoArea.getBoundingClientRect();
+                let newLeft = e.clientX - areaRect.left - offsetX;
+                let newTop = e.clientY - areaRect.top - offsetY;
+                el.style.left = newLeft + 'px';
+                el.style.top = newTop + 'px';
+            });
+
+            function endDrag(e) {
+                if (!isDragging) return;
+                isDragging = false;
+                el.classList.remove('dragging');
+                el.releasePointerCapture(e.pointerId);
+                checkDropZone(el, targetZone, onCorrectDrop, startLeft, startTop);
+            }
+
+            el.addEventListener('pointerup', endDrag);
+            el.addEventListener('pointercancel', endDrag);
+        }
+
+        function checkDropZone(el, targetZone, onCorrectDrop, startLeft, startTop) {
+            const elRect = el.getBoundingClientRect();
+            const zoneRect = targetZone.getBoundingClientRect();
+            const tolerance = 10; // px, boleh kamu ubah
+ 
+            const fullyInside =
+                elRect.left   >= zoneRect.left   - tolerance &&
+                elRect.right  <= zoneRect.right  + tolerance &&
+                elRect.top    >= zoneRect.top    - tolerance &&
+                elRect.bottom <= zoneRect.bottom + tolerance;
+ 
+            if (fullyInside) {
+                snapToCenter(el, targetZone);
+                if (onCorrectDrop) onCorrectDrop();
+            } else {
+                el.classList.add('snap-back');
+                falseAudio.play();
+                el.style.left = startLeft;
+                el.style.top = startTop;
+            }
+        }
+
+        makeDraggable(appleButton3, appleDropZone, () => trueAudio.play());
+        makeDraggable(orangeButton3, orangeDropZone, () => trueAudio.play());
+
         function updateVideoArea() {
             const vw = video.videoWidth;
             const vh = video.videoHeight;
-            if (!vw || !vh) return; // metadata video belum siap
+            if (!vw || !vh) return;
 
             const cw = videoWrapper.clientWidth;
             const ch = videoWrapper.clientHeight;
@@ -241,13 +407,11 @@
             let renderWidth, renderHeight, offsetX, offsetY;
 
             if (containerRatio > videoRatio) {
-                // Layar lebih "lebar" dari video -> ada bar hitam kiri-kanan
                 renderHeight = ch;
                 renderWidth = ch * videoRatio;
                 offsetX = (cw - renderWidth) / 2;
                 offsetY = 0;
             } else {
-                // Layar lebih "tinggi/kurus" dari video -> ada bar hitam atas-bawah
                 renderWidth = cw;
                 renderHeight = cw / videoRatio;
                 offsetX = 0;
@@ -263,18 +427,19 @@
         video.addEventListener('loadedmetadata', updateVideoArea);
         window.addEventListener('resize', updateVideoArea);
         window.addEventListener('orientationchange', updateVideoArea);
-        // Jaga-jaga kalau metadata sudah ready duluan sebelum listener terpasang
         updateVideoArea();
 
         video.addEventListener('ended', () => {
             if (videoSaatIni === 1) {
-                videoOverlay.classList.remove('choice-mode', 'choice-mode-3');
+                videoOverlay.classList.remove('choice-mode', 'choice-mode-3', 'choice-mode-4');
                 videoOverlay.classList.add('visible');
             } else if (videoSaatIni === 2) {
                 videoOverlay.classList.add('choice-mode', 'visible');
             } else if (videoSaatIni === 3) {
                 videoOverlay.classList.add('choice-mode-3', 'visible');
-            } 
+            } else if (videoSaatIni === 4) {
+                videoOverlay.classList.add('choice-mode-4', 'visible');
+            }
         });
 
         nextButton.addEventListener('click', () => {
@@ -282,25 +447,28 @@
                 videoSource.src = './2/video.mp4';
                 videoSaatIni = 2;
             }
-
             videoOverlay.classList.remove('visible');
             video.load();
             video.play();
         });
 
         appleButton.addEventListener('click', () => {
+            falseAudio.remove();
+            trueAudio.play();
             videoSource.src = './3/video.mp4';
             videoSaatIni = 3;
-            videoOverlay.classList.remove('choice-mode', 'choice-mode-3', 'visible');
+            videoOverlay.classList.remove('choice-mode', 'choice-mode-3', 'choice-mode-4', 'visible');
             video.load();
             video.play();
         });
 
         orangeButton.addEventListener('click', () => {
-            orangeAudio.play();
+            falseAudio.play();
         });
 
         orangeButton2.addEventListener('click', () => {
+            falseAudio.remove();
+            trueAudio.play();
             videoSource.src = './4/video.mp4';
             videoSaatIni = 4;
             videoOverlay.classList.remove('choice-mode', 'choice-mode-3', 'visible');
@@ -309,10 +477,8 @@
         });
 
         appleButton2.addEventListener('click', () => {
-            appleAudio.play();
+            falseAudio.play();
         });
-
-
     </script>
 </body>
 </html>
