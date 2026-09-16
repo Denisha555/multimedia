@@ -166,10 +166,11 @@
             height: 16%;
             top: 58%;
             left: 7%;
-            border: 3px solid white;
+            border: clamp(1px, 0.6vw, 5px) solid white;
             background-color: rgb(0, 182, 0);
             border-radius: 12px;
-            font-size: 2rem;
+            font-size: clamp(1rem, 4vw, 2.5rem);
+            color: white;
             font-weight: bold;
             cursor: grab;
             /* WAJIB: tanpa ini, gesture drag di HP akan diganggu/dibatalkan
@@ -186,10 +187,11 @@
             height: 16%;
             top: 58%;
             left: 56%;
-            border: 3px solid white;
+            border: clamp(1px, 0.6vw, 5px) solid white;
             background-color: rgb(0, 182, 0);
             border-radius: 12px;
-            font-size: 2rem;
+            font-size: clamp(1rem, 4vw, 2.5rem);
+            color: white;
             font-weight: bold;
             cursor: grab;
             touch-action: none;
