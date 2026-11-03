@@ -20,12 +20,12 @@
             object-fit: contain;
         }
 
-        .video-player::-webkit-media-controls,
+        /* .video-player::-webkit-media-controls,
         .video-player::-webkit-media-controls-panel,
         .video-player::-webkit-media-controls-start-playback-button {
             display: none !important;
             -webkit-appearance: none !important;
-        }
+        } */
 
         .video-wrapper {
             position: relative;
@@ -74,6 +74,149 @@
             background-repeat: no-repeat;
             background-image: url('./1/mulai.png');
             opacity: 0;
+        }
+
+        .kesehatan-button {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            left: 14%;
+            top: 26.5%;
+            width: 15%;
+            height: 25%;
+            color: white;
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: white;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('./opening/kesehatan.png');
+            opacity: 0;
+        }
+
+        .ecommerce-button {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            left: 42%;
+            top: 26.5%;
+            width: 19%;
+            height: 25%;
+            color: white;
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: white;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('./opening/e-commerce.png');
+            opacity: 0;
+        }
+
+        .keamanan-button {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            left: 71.5%;
+            top: 26.5%;
+            width: 15%;
+            height: 25%;
+            color: white;
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: white;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('./opening/keamanan.png');
+            opacity: 0;
+        }
+
+        .pertanian-button {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            left: 14%;
+            top: 59%;
+            width: 15%;
+            height: 25%;
+            color: white;
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: white;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('./opening/pertanian.png');
+            opacity: 0;
+        }
+
+        .transportasi-button {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            left: 41%;
+            top: 59%;
+            width: 18.5%;
+            height: 25%;
+            color: white;
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: white;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('./opening/transportasi.png');
+            opacity: 0;
+        }
+
+        .opening-next {
+            display: none;
+            top: 5%;
+            left: 19%;
+            flex-shrink: 0;
+            position: absolute;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .opening-previouse {
+            display: none;
+            top: 5%;
+            left: 5%;
+            flex-shrink: 0;
+            position: absolute;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .opening-try-again {
+            display: none;
+            top: 5%;
+            left: 12%;
+            flex-shrink: 0;
+            position: absolute;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
         .apple-button {
@@ -164,7 +307,6 @@
             opacity: 0;
         }
 
-        /* Tombol drag: apel & jeruk (target: drag ke drop zone) */
         .apple-button3 {
             display: none;
             flex-shrink: 0;
@@ -173,17 +315,16 @@
             height: 16%;
             top: 58%;
             left: 7%;
-            border: clamp(1px, 0.6vw, 5px) solid white;
-            background-color: rgb(0, 182, 0);
+            background-color: #a83236;
+            border: 0.18vw solid #d65055;
             border-radius: 12px;
-            font-size: clamp(1rem, 4vw, 2.5rem);
+            font-size: 4vw;
             color: white;
             font-weight: bold;
             cursor: grab;
-            /* WAJIB: tanpa ini, gesture drag di HP akan diganggu/dibatalkan
-               oleh scroll bawaan browser */
             touch-action: none;
             z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
         }
 
         .orange-button3 {
@@ -194,15 +335,16 @@
             height: 16%;
             top: 58%;
             left: 56%;
-            border: clamp(1px, 0.6vw, 5px) solid white;
-            background-color: rgb(0, 182, 0);
+            background-color: #d46b13;
+            border: 0.18vw solid #f18c32;
             border-radius: 12px;
-            font-size: clamp(1rem, 4vw, 2.5rem);
+            font-size: 4vw;
             color: white;
             font-weight: bold;
             cursor: grab;
             touch-action: none;
             z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
         }
 
         .apple-button3.dragging,
@@ -212,7 +354,6 @@
             transition: none;
         }
 
-        /* Animasi halus saat snap-back ke posisi semula (kalau salah drop) */
         .apple-button3.snap-back,
         .orange-button3.snap-back {
             transition: left 0.3s ease, top 0.3s ease;
@@ -221,7 +362,7 @@
         .drop-zone {
             display: none;
             position: absolute;
-            border: 2px transparent; 
+            border: 2px transparent;
             box-sizing: border-box;
         }
 
@@ -239,16 +380,266 @@
             height: 22%;
         }
 
+        .quiz1-button1 {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            width: 57%;
+            height: 20%;
+            left: 9.5%;
+            top: 16%;
+            color: white;
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: white;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('./6/button1.png');
+            opacity: 0;
+        }
+
+        .quiz1-button2 {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            width: 57%;
+            height: 19%;
+            left: 9.5%;
+            top: 38%;
+            color: white;
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: white;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('./6/button2.png');
+            opacity: 0;
+        }
+
+        .quiz1-button3 {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            width: 20%;
+            height: 10%;
+            left: 9.5%;
+            top: 65%;
+            cursor: pointer;
+
+            color: #ffffff;
+            font-family: 'Poppins', 'Inter', sans-serif;
+            font-size: 1.5vw; 
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            text-shadow: 0 0.15em 0.3em rgba(0, 0, 0, 0.5);
+
+
+            border-radius: 9999px; 
+            border: 0.15vw solid rgba(85, 205, 252, 0.7); 
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+
+            background: linear-gradient(180deg, #184285 0%, #0d2757 100%);
+
+            box-shadow: 
+                0 0.4vw 1vw rgba(0, 0, 0, 0.4),          
+                0 0 1.2vw rgba(85, 205, 252, 0.35),      
+                inset 0 0.1vw 0.2vw rgba(255, 255, 255, 0.35);
+        }
+
+        .quiz1-button4 {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            width: 20%;
+            height: 10%;
+            left: 33%;
+            top: 65%;
+            cursor: pointer;
+
+            color: #ffffff;
+            font-family: 'Poppins', 'Inter', sans-serif;
+            font-size: 1.5vw; 
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            text-shadow: 0 0.15em 0.3em rgba(0, 0, 0, 0.5);
+
+
+            border-radius: 9999px; 
+            border: 0.15vw solid rgba(85, 205, 252, 0.7); 
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+
+            background: linear-gradient(180deg, #184285 0%, #0d2757 100%);
+
+            box-shadow: 
+                0 0.4vw 1vw rgba(0, 0, 0, 0.4),          
+                0 0 1.2vw rgba(85, 205, 252, 0.35),      
+                inset 0 0.1vw 0.2vw rgba(255, 255, 255, 0.35);
+        }
+
+        .quiz2-button1 {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            width: 58%;
+            height: 20%;
+            left: 10%;
+            top: 16%;
+            color: white;
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: white;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('./7/button1.png');
+            opacity: 0;
+        }
+
+        .quiz2-button2 {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            width: 58%;
+            height: 19%;
+            left: 10%;
+            top: 38%;
+            color: white;
+            border: 0;
+            border-radius: 12px;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: white;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-image: url('./7/button1.png');
+            opacity: 0;
+        }
+
+        .quiz2-button3 {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            width: 20%;
+            height: 10%;
+            left: 9.5%;
+            top: 65%;
+            cursor: pointer;
+
+            color: #ffffff;
+            font-family: 'Poppins', 'Inter', sans-serif;
+            font-size: 1.5vw; 
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            text-shadow: 0 0.15em 0.3em rgba(0, 0, 0, 0.5);
+
+
+            border-radius: 9999px; 
+            border: 0.15vw solid rgba(85, 205, 252, 0.7); 
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+
+            background: linear-gradient(180deg, #184285 0%, #0d2757 100%);
+
+            box-shadow: 
+                0 0.4vw 1vw rgba(0, 0, 0, 0.4),          
+                0 0 1.2vw rgba(85, 205, 252, 0.35),      
+                inset 0 0.1vw 0.2vw rgba(255, 255, 255, 0.35);
+        }
+
+        .quiz2-button4 {
+            display: none;
+            flex-shrink: 0;
+            position: absolute;
+            width: 20%;
+            height: 10%;
+            left: 33%;
+            top: 65%;
+            cursor: pointer;
+
+            color: #ffffff;
+            font-family: 'Poppins', 'Inter', sans-serif;
+            font-size: 1.5vw; 
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            text-shadow: 0 0.15em 0.3em rgba(0, 0, 0, 0.5);
+
+
+            border-radius: 9999px; 
+            border: 0.15vw solid rgba(85, 205, 252, 0.7); 
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+
+            background: linear-gradient(180deg, #184285 0%, #0d2757 100%);
+
+            box-shadow: 
+                0 0.4vw 1vw rgba(0, 0, 0, 0.4),          
+                0 0 1.2vw rgba(85, 205, 252, 0.35),      
+                inset 0 0.1vw 0.2vw rgba(255, 255, 255, 0.35);
+        }
+
         .start-overlay.choice-mode {
             flex-direction: row;
         }
 
         .start-overlay.choice-mode .start-button {
-            display: none;
+            display: block;
         }
 
-        .start-overlay.choice-mode .apple-button,
-        .start-overlay.choice-mode .orange-button {
+        .start-overlay.choice-mode-01 .kesehatan-button {
+            display: block;
+        }
+
+        .start-overlay.choice-mode-02 .ecommerce-button {
+            display: block;
+        }
+
+        .start-overlay.choice-mode-03 .keamanan-button {
+            display: block;
+        }
+
+        .start-overlay.choice-mode-04 .pertanian-button {
+            display: block;
+        }
+
+        .start-overlay.choice-mode-05 .transportasi-button {
+            display: block;
+        }
+
+        .start-overlay.choice-mode-10 .opening-next,
+        .start-overlay.choice-mode-11 .opening-try-again,
+        .start-overlay.choice-mode-12 .opening-previouse{
+            display: block;
+        }
+
+        .start-overlay.choice-mode-2 .apple-button,
+        .start-overlay.choice-mode-2 .orange-button {
             display: block;
         }
 
@@ -272,6 +663,26 @@
 
         .start-overlay.choice-mode-4 .apple-drop-zone,
         .start-overlay.choice-mode-4 .orange-drop-zone {
+            display: block;
+        }
+
+        .start-overlay.choice-mode-5 .quiz1-button1,
+        .start-overlay.choice-mode-5 .quiz1-button2, 
+        .start-overlay.choice-mode-5 .quiz1-button3{
+            display: block;
+        }
+
+        .start-overlay.choice-mode-51 .quiz1-button4 {
+            display: block;
+        }
+
+        .start-overlay.choice-mode-6 .quiz2-button1,
+        .start-overlay.choice-mode-6 .quiz2-button2, 
+        .start-overlay.choice-mode-6 .quiz2-button3 {
+            display: block;
+        }
+
+        .start-overlay.choice-mode-61 .quiz2-button4 {
             display: block;
         }
     </style>
@@ -307,18 +718,116 @@
             }
         </style>
     </div>
+
     <div class="video-wrapper" id="videoWrapper">
-        <video id="video" class="video-player" playsinline webkit-playsinline disablePictureInPicture controlsList="nodownload noplaybackrate">
-            <source src="./1/video.mp4" type="video/mp4">
+        <!-- <video id="video" class="video-player" playsinline webkit-playsinline disablePictureInPicture controlsList="nodownload noplaybackrate">
+            <source src="./opening/video.mp4" type="video/mp4">
+        </video> -->
+
+        <video id="video" class="video-player" controls>
+            <source src="./opening/video.mp4" type="video/mp4">
         </video>
 
         <div class="video-area" id="videoArea">
             <div class="start-overlay" id="videoOverlay">
-                <button id="nextButton" class="start-button" type="button"></button>
-                <button id="appleButton" class="apple-button" type="button"></button>
-                <button id="orangeButton" class="orange-button" type="button"></button>
-                <button id="appleButton2" class="apple-button2" type="button"></button>
-                <button id="orangeButton2" class="orange-button2" type="button"></button>
+                <div id="openingNext" class="opening-next">
+                    <div style="
+                        width: clamp(40px, 30vw, 20px);
+                        height: clamp(40px, 30vw, 20px);
+                        border-radius: 50%;
+                        background: rgba(10, 25, 45, 0.88);
+                        box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.25);
+                        display: flex; align-items: center; justify-content: center;
+                        animation: nextPulse 1.6s ease-in-out infinite;
+                    ">
+                        <div style="
+                            width: 0; height: 0;
+                            border-top: clamp(10px, 8vw, 5px) solid transparent;
+                            border-bottom: clamp(10px, 8vw, 5px) solid transparent;
+                            border-left: clamp(14px, 13vw, 10px) solid rgb(255, 255, 255);
+                            margin-left: 5px;
+                        "></div>
+                    </div>
+                    <style>
+                        @keyframes nextPulse {
+                            0%, 100% { box-shadow: 0 0 0 4px rgba(10, 25, 45, 0.50); }
+                            50% { box-shadow: 0 0 0 8px rgba(10, 25, 45, 0.1); }
+                        }
+                    </style>
+                </div>
+
+                <div id="openingTryAgain" class="opening-try-again">
+                    <div style="
+                        width: clamp(40px, 30vw, 20px);
+                        height: clamp(40px, 30vw, 20px);
+                        border-radius: 50%;
+                        background: rgba(10, 25, 45, 0.88);
+                        box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.25);
+                        display: flex; align-items: center; justify-content: center;
+                        animation: tryAgaintPulse 1.6s ease-in-out infinite;
+                    ">
+                        <svg width="27" height="27"
+                            viewBox="0 0 32 32"
+                            fill="none"
+                            stroke="white"
+                            stroke-width="clamp(4px, 3vw, 2px)"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <!-- M4 5	Pindah ke koordinat (4, 5) -->
+                            <!-- V12	Gambar garis vertikal ke y = 12 -->
+                            <!-- H11	Gambar garis horizontal ke x = 11 -->
+                            <!-- L      Gambar garis -->
+                            <!-- A	Menggambar busur
+                                10	Radius horizontal (rx) = 10
+                                10	Radius vertikal (ry) = 10
+                                0	Rotasi elips = 0°
+                                0	large-arc-flag = 0, memilih busur kecil
+                                0	sweep-flag = 0, menentukan arah busur
+                                25 24	Koordinat tujuan (x = 25, y = 24) -->
+                            <path d="M25 12A10 10 0 0 0 7 8L4 12"/>
+                            <path d="M4 5V12H11"/>
+                            <path d="M7 20A10 10 0 0 0 23 23L25 20"/>
+                        </svg>
+                    </div>
+                    <style>
+                        @keyframes tryAgaintPulse {
+                            0%, 100% { box-shadow: 0 0 0 4px rgba(10, 25, 45, 0.50); }
+                            50% { box-shadow: 0 0 0 8px rgba(10, 25, 45, 0.1); }
+                        }
+                    </style>
+                </div>
+
+                <div id="openingPreviouse" class="opening-previouse">
+                    <div style="
+                        width: clamp(40px, 30vw, 20px);
+                        height: clamp(40px, 30vw, 20px);
+                        border-radius: 50%;
+                        background: rgba(10, 25, 45, 0.88);
+                        box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.25);
+                        display: flex; align-items: center; justify-content: center;
+                        animation: previuousetPulse 1.6s ease-in-out infinite;
+                    ">
+                        <div style="
+                            width: 0; height: 0;
+                            border-top: clamp(10px, 8vw, 5px) solid transparent;
+                            border-bottom: clamp(10px, 8vw, 5px) solid transparent;
+                            border-right: clamp(14px, 13vw, 10px) solid rgb(255, 255, 255);
+                            margin-right: 5px;
+                        "></div>
+                    </div>
+                    <style>
+                        @keyframes previuousetPulse {
+                            0%, 100% { box-shadow: 0 0 0 4px rgba(10, 25, 45, 0.50); }
+                            50% { box-shadow: 0 0 0 8px rgba(10, 25, 45, 0.1); }
+                        }
+                    </style>
+                </div>
+
+                <audio id="backgroundAudio" class="background-audio" loop>
+                    <source src="background_audio.mp3" type="audio/mpeg">
+                </audio>
+                
                 <audio id="trueAudio" class="true-audio">
                     <source src="true_audio.mp3" type="audio/mpeg">
                 </audio>
@@ -326,13 +835,35 @@
                     <source src="false_audio.mp3" type="audio/mpeg">
                 </audio>
 
-                <!-- Drop zone (kotak target) -->
+                <button id="kesehatanButton" class="kesehatan-button" type="button"></button>
+                <button id="ecommerceButton" class="ecommerce-button" type="button"></button>
+                <button id="keamananButton" class="keamanan-button" type="button"></button>
+                <button id="pertanianButton" class="pertanian-button" type="button"></button>
+                <button id="transportasiButton" class="transportasi-button" type="button"></button>
+
+                <button id="nextButton" class="start-button" type="button"></button>
+
+                <button id="appleButton" class="apple-button" type="button"></button>
+                <button id="orangeButton" class="orange-button" type="button"></button>
+
+                <button id="appleButton2" class="apple-button2" type="button"></button>
+                <button id="orangeButton2" class="orange-button2" type="button"></button>
+
                 <div id="appleDropZone" class="drop-zone apple-drop-zone"></div>
                 <div id="orangeDropZone" class="drop-zone orange-drop-zone"></div>
 
-                <!-- Tombol yang bisa di-drag -->
                 <button id="appleButton3" class="apple-button3" type="button">APEL</button>
                 <button id="orangeButton3" class="orange-button3" type="button">JERUK</button>
+
+                <button id="quiz1button1" class="quiz1-button1" type="button"></button>
+                <button id="quiz1button2" class="quiz1-button2" type="button"></button>
+                <button id="quiz1button3" class="quiz1-button3" type="button">Ulangi Soal</button>
+                <button id="quiz1button4" class="quiz1-button4" type="button">Nonton Ulang</button>
+
+                <button id="quiz2button1" class="quiz2-button1" type="button"></button>
+                <button id="quiz2button2" class="quiz2-button2" type="button"></button>
+                <button id="quiz2button3" class="quiz2-button3" type="button">Ulangi Soal</button>
+                <button id="quiz2button4" class="quiz2-button4" type="button">Nonton Ulang</button>
             </div>
         </div>
     </div>
@@ -344,25 +875,52 @@
         const videoWrapper = document.getElementById('videoWrapper');
         const videoArea = document.getElementById('videoArea');
         const videoOverlay = document.getElementById('videoOverlay');
-        const nextButton = document.getElementById('nextButton');
-        const appleButton = document.getElementById('appleButton');
-        const orangeButton = document.getElementById('orangeButton');
-        const appleButton2 = document.getElementById('appleButton2');
-        const orangeButton2 = document.getElementById('orangeButton2');
-        const orangeAudio = document.getElementById('orangeAudio');
-        const appleAudio = document.getElementById('appleAudio');
-        const appleButton3 = document.getElementById('appleButton3');
-        const orangeButton3 = document.getElementById('orangeButton3');
-        const appleDropZone = document.getElementById('appleDropZone');
-        const orangeDropZone = document.getElementById('orangeDropZone');
+
+        const backgroundAudio = document.getElementById('backgroundAudio');
+        backgroundAudio.volume = 0.1;
+
         const trueAudio = document.getElementById('trueAudio');
         const falseAudio = document.getElementById('falseAudio');
-        let videoSaatIni = 1;
+
+        const openingNext = document.getElementById('openingNext');
+        const openingTryAgain = document.getElementById('openingTryAgain');
+        const openingPreviouse = document.getElementById('openingPreviouse');
+
+        const kesehatanButton = document.getElementById('kesehatanButton');
+        const ecommerceButton = document.getElementById('ecommerceButton');
+        const keamananButton = document.getElementById('keamananButton');
+        const pertanianButton = document.getElementById('pertanianButton');
+        const transportasiButton = document.getElementById('transportasiButton');
+
+        const nextButton = document.getElementById('nextButton');
+
+        const appleButton = document.getElementById('appleButton');
+        const orangeButton = document.getElementById('orangeButton');
+
+        const appleButton2 = document.getElementById('appleButton2');
+        const orangeButton2 = document.getElementById('orangeButton2');
+
+        const appleButton3 = document.getElementById('appleButton3');
+        const orangeButton3 = document.getElementById('orangeButton3');
+
+        const appleDropZone = document.getElementById('appleDropZone');
+        const orangeDropZone = document.getElementById('orangeDropZone');
+  
+        const quiz1button1 = document.getElementById('quiz1button1');
+        const quiz1button2 = document.getElementById('quiz1button2');
+        const quiz1button3 = document.getElementById('quiz1button3');
+        const quiz1button4 = document.getElementById('quiz1button4');
+
+        const quiz2button1 = document.getElementById('quiz2button1');
+        const quiz2button2 = document.getElementById('quiz2button2');
+        const quiz2button3 = document.getElementById('quiz2button3');
+        const quiz2button4 = document.getElementById('quiz2button4');
+
+        // ===== BUTTONS =====
+        let videoSaatIni = 0;
 
         // ===== DRAG AND DROP =====
-        // Setiap tombol draggable dipasangkan dengan satu drop zone (targetZone)
-        // dan satu audio yang dimainkan kalau berhasil di-drop di zona itu.
-        function makeDraggable(el, targetZone, onCorrectDrop) {
+        function makeDraggable(el, targetZone, onCorrectDrop, onWrongDrop) {
             let offsetX = 0, offsetY = 0, isDragging = false;
             let startLeft = '', startTop = '';
 
@@ -372,7 +930,6 @@
                 el.classList.remove('snap-back');
                 el.setPointerCapture(e.pointerId);
 
-                // Simpan posisi awal (dalam px, relatif ke videoArea) untuk snap-back
                 const areaRect = videoArea.getBoundingClientRect();
                 const rect = el.getBoundingClientRect();
                 startLeft = (rect.left - areaRect.left) + 'px';
@@ -401,24 +958,24 @@
                 isDragging = false;
                 el.classList.remove('dragging');
                 el.releasePointerCapture(e.pointerId);
-                checkDropZone(el, targetZone, onCorrectDrop, startLeft, startTop);
+                checkDropZone(el, targetZone, onCorrectDrop, onWrongDrop, startLeft, startTop);
             }
 
             el.addEventListener('pointerup', endDrag);
             el.addEventListener('pointercancel', endDrag);
         }
 
-        function checkDropZone(el, targetZone, onCorrectDrop, startLeft, startTop) {
+        function checkDropZone(el, targetZone, onCorrectDrop, onWrongDrop, startLeft, startTop) {
             const elRect = el.getBoundingClientRect();
             const zoneRect = targetZone.getBoundingClientRect();
-            const tolerance = 10; // px, boleh kamu ubah
- 
+            const tolerance = 10; 
+
             const fullyInside =
                 elRect.left   >= zoneRect.left   - tolerance &&
                 elRect.right  <= zoneRect.right  + tolerance &&
                 elRect.top    >= zoneRect.top    - tolerance &&
                 elRect.bottom <= zoneRect.bottom + tolerance;
- 
+
             if (fullyInside) {
                 snapToCenter(el, targetZone);
                 if (onCorrectDrop) onCorrectDrop();
@@ -427,11 +984,47 @@
                 falseAudio.play();
                 el.style.left = startLeft;
                 el.style.top = startTop;
+                if (onWrongDrop) onWrongDrop();
             }
         }
 
-        makeDraggable(appleButton3, appleDropZone, () => trueAudio.play());
-        makeDraggable(orangeButton3, orangeDropZone, () => trueAudio.play());
+        function snapToCenter(el, targetZone) {
+            const areaRect = videoArea.getBoundingClientRect();
+            const zoneRect = targetZone.getBoundingClientRect();
+            const elRect = el.getBoundingClientRect();
+
+            const zoneCenterX = zoneRect.left - areaRect.left + zoneRect.width / 2;
+            const zoneCenterY = zoneRect.top - areaRect.top + zoneRect.height / 2;
+
+            const newLeft = zoneCenterX - elRect.width / 2;
+            const newTop = zoneCenterY - elRect.height / 2;
+
+            el.classList.add('snap-back');
+            el.style.left = newLeft + 'px';
+            el.style.top = newTop + 'px';
+        }
+
+        let appleCorrect = false;
+        let orangeCorrect = false;
+
+        function checkBothCorrect() {
+            if (appleCorrect && orangeCorrect) {
+                videoSource.src = './5/video.mp4'; 
+                videoSaatIni = 5;
+                videoOverlay.classList.remove('choice-mode-4', 'visible');
+                video.load();
+                video.play();
+            }
+        }
+
+        makeDraggable(appleButton3, appleDropZone,
+            () => { trueAudio.play(); appleCorrect = true; checkBothCorrect(); },
+            () => { appleCorrect = false; }
+        );
+        makeDraggable(orangeButton3, orangeDropZone,
+            () => { trueAudio.play(); orangeCorrect = true; checkBothCorrect(); },
+            () => { orangeCorrect = false; }
+        );
 
         function updateVideoArea() {
             const vw = video.videoWidth;
@@ -474,26 +1067,111 @@
             video.play().catch((err) => {
                 console.error('Video gagal diputar:', err);
             });
+            backgroundAudio.play()
         }, { once: true });
 
         video.addEventListener('ended', () => {
-            if (videoSaatIni === 1) {
-                videoOverlay.classList.remove('choice-mode', 'choice-mode-3', 'choice-mode-4');
+            if (videoSaatIni === 0) {
+                videoOverlay.classList.remove('choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05',  'choice-mode-10', 'choice-mode-11', 'choice-mode-12', 'choice-mode-2', 'choice-mode-3', 'choice-mode-4', 'choice-mode-5', 'choice-mode-51', 'choice-mode-6', 'choice-mode-61');
+                videoOverlay.classList.add('choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05', 'visible');
+            } else if (videoSaatIni === 0.1) {
+                videoOverlay.classList.add('choice-mode-10', 'choice-mode-11', 'choice-mode-12', 'visible');
+            } else if (videoSaatIni === 1) {
+                videoOverlay.classList.remove('choice-mode', 'choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05',  'choice-mode-10', 'choice-mode-11', 'choice-mode-12', 'choice-mode-2', 'choice-mode-3', 'choice-mode-4', 'choice-mode-5', 'choice-mode-51', 'choice-mode-6', 'choice-mode-61');
                 videoOverlay.classList.add('visible');
             } else if (videoSaatIni === 2) {
-                videoOverlay.classList.add('choice-mode', 'visible');
+                videoOverlay.classList.add('choice-mode-2', 'visible');
             } else if (videoSaatIni === 3) {
                 videoOverlay.classList.add('choice-mode-3', 'visible');
             } else if (videoSaatIni === 4) {
                 videoOverlay.classList.add('choice-mode-4', 'visible');
+            } else if (videoSaatIni === 5) {
+                videoSource.src = './6/video.mp4';
+                videoSaatIni = 6;
+                video.load();
+                video.play();
+            } else if (videoSaatIni === 6) {
+                videoOverlay.classList.add('choice-mode-5', 'visible');
+            } else if (videoSaatIni === 7) {
+                videoOverlay.classList.add('choice-mode-6', 'visible');
             }
         });
 
+        kesehatanButton.addEventListener('click', () => {
+            videoSource.src = './opening1/video.mp4';
+            videoSaatIni = 0.1;
+            videoOverlay.classList.remove('choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05');
+            video.load();
+            video.play();
+        });
+
+        ecommerceButton.addEventListener('click', () => {
+            videoSource.src = './opening2/video.mp4';
+            videoSaatIni = 0.1;
+            videoOverlay.classList.remove('choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05');
+            video.load();
+            video.play();
+        })
+
+        keamananButton.addEventListener('click', () => {
+            videoSource.src = './opening3/video.mp4';
+            videoSaatIni = 0.1;
+            videoOverlay.classList.remove('choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05');
+            video.load();
+            video.play();
+        })
+
+        pertanianButton.addEventListener('click', () => {
+            videoSource.src = './opening4/video.mp4';
+            videoSaatIni = 0.1;
+            videoOverlay.classList.remove('choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05');
+            video.load();
+            video.play();
+        })
+
+        transportasiButton.addEventListener('click', () => {
+            videoSource.src = './opening5/video.mp4';
+            videoSaatIni = 0.1;
+            videoOverlay.classList.remove('choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05');
+            video.load();
+            video.play();
+        })
+
+        openingNext.addEventListener('click', () => {
+            videoSource.src = './1/video.mp4';
+            videoSaatIni = 1;
+            videoOverlay.classList.remove('choice-mode-10', 'choice-mode-11', 'choice-mode-12');
+            video.load();
+            video.play();
+        });
+
+        openingTryAgain.addEventListener('click', () => {
+            videoOverlay.classList.remove('visible', 'choice-mode-10', 'choice-mode-11', 'choice-mode-12');
+            video.currentTime = 0;
+            video.play().catch((err) => {
+                console.error('Video gagal diputar:', err);
+            });
+        })
+
+        openingPreviouse.addEventListener('click', () => {
+            videoSource.src = './opening/video.mp4';
+            videoSaatIni = 0;
+            videoOverlay.classList.remove(
+                'choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05', 'choice-mode-10',
+                'choice-mode-11', 'choice-mode-12'
+            );
+            video.addEventListener('loadedmetadata', () => {
+                video.currentTime = Math.max(0, video.duration - 0.1);
+                video.play().catch((err) => {
+                    console.error('Video gagal diputar:', err);
+                });
+            }, { once: true });
+            video.load();
+        })
+
         nextButton.addEventListener('click', () => {
-            if (videoSaatIni === 1) {
-                videoSource.src = './2/video.mp4';
-                videoSaatIni = 2;
-            }
+            videoSource.src = './2/video.mp4';
+            videoSaatIni = 2;
             videoOverlay.classList.remove('visible');
             video.load();
             video.play();
@@ -526,6 +1204,68 @@
         appleButton2.addEventListener('click', () => {
             falseAudio.play();
         });
+
+        quiz1button1.addEventListener('click', () => {
+            falseAudio.remove();
+            trueAudio.play();
+            videoSource.src = './7/video.mp4';
+            videoSaatIni = 7;
+            videoOverlay.classList.remove('choice-mode-5', 'choice-mode-51', 'visible');
+            video.load();
+            video.play();
+        });
+
+        quiz1button2.addEventListener('click', () => {
+            falseAudio.play();
+            videoOverlay.classList.add('choice-mode-51', 'visible');
+        });
+
+        quiz1button3.addEventListener('click', () => {
+            videoOverlay.classList.remove('choice-mode-51', 'choice-mode-5', 'visible');
+            videoSource.src = './6/video.mp4';
+            videoSaatIni = 6;
+            video.load();
+            video.play();
+        });
+
+        quiz1button4.addEventListener('click', () => {
+            videoOverlay.classList.remove('choice-mode-51', 'choice-mode-5', 'visible');
+            videoSource.src = './opening/video.mp4';
+            videoSaatIni = 0;
+            video.load();
+            video.play();
+        });
+
+        quiz2button1.addEventListener('click', () => {
+            falseAudio.remove();
+            trueAudio.play();
+            videoSource.src = './closing/video.mp4';
+            videoSaatIni = 8;
+            videoOverlay.classList.remove('choice-mode-6', 'choice-mode-61', 'visible');
+            video.load();
+            video.play();
+        });
+
+        quiz2button2.addEventListener('click', () => {
+            falseAudio.play();
+            videoOverlay.classList.add('choice-mode-61', 'visible');
+        });
+
+        quiz2button3.addEventListener('click', () => {
+            videoOverlay.classList.remove('choice-mode-61', 'choice-mode-6', 'visible');
+            videoSource.src = './7/video.mp4';
+            videoSaatIni = 7;
+            video.load();
+            video.play();
+        });
+
+        quiz2button4.addEventListener('click', () => {
+            videoOverlay.classList.remove('choice-mode-61',  'choice-mode-6', 'visible');
+            videoSource.src = './opening/video.mp4';
+            videoSaatIni = 0;
+            video.load();
+            video.play();
+        })
     </script>
 </body>
 </html>
