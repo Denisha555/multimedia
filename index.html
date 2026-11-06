@@ -57,6 +57,7 @@
         }
 
         .start-button {
+            display: none;
             width: 26%;
             height: 15%;
             position: absolute;
@@ -1078,7 +1079,7 @@
                 videoOverlay.classList.add('choice-mode-10', 'choice-mode-11', 'choice-mode-12', 'visible');
             } else if (videoSaatIni === 1) {
                 videoOverlay.classList.remove('choice-mode', 'choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05',  'choice-mode-10', 'choice-mode-11', 'choice-mode-12', 'choice-mode-2', 'choice-mode-3', 'choice-mode-4', 'choice-mode-5', 'choice-mode-51', 'choice-mode-6', 'choice-mode-61');
-                videoOverlay.classList.add('visible');
+                videoOverlay.classList.add('choice-mode', 'visible');
             } else if (videoSaatIni === 2) {
                 videoOverlay.classList.add('choice-mode-2', 'visible');
             } else if (videoSaatIni === 3) {
@@ -1172,7 +1173,7 @@
         nextButton.addEventListener('click', () => {
             videoSource.src = './2/video.mp4';
             videoSaatIni = 2;
-            videoOverlay.classList.remove('visible');
+            videoOverlay.classList.remove('choice-mode', 'visible');
             video.load();
             video.play();
         });
