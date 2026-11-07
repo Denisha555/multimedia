@@ -14,10 +14,23 @@
         }
 
         .video-player {
+            position: absolute;
+            inset: 0;
             display: block;
             width: 100%;
             height: 100%;
             object-fit: contain;
+        }
+
+        .youtube-player-container {
+            position: absolute;
+            inset: 0;
+        }
+
+        #youtubePlayer,
+        #youtubePlayer iframe {
+            width: 100%;
+            height: 100%;
         }
 
         .video-player::-webkit-media-controls,
@@ -735,14 +748,12 @@
     </div>
 
     <div class="video-wrapper" id="videoWrapper">
-        <video id="video" class="video-player" playsinline webkit-playsinline disablePictureInPicture controlsList="nodownload noplaybackrate">
-            <!-- <source src="./opening/video.mp4" type="video/mp4"> -->
-            <source src="https://youtu.be/4c8UxkUBqTg?si=j7q67lkyT4d5V9Wa">
-        </video>
-
-        <!-- <video id="video" class="video-player" controls>
+        <div class="youtube-player-container" id="youtubePlayerContainer">
+            <div id="youtubePlayer"></div>
+        </div>
+        <video id="video" class="video-player" playsinline webkit-playsinline disablePictureInPicture controlsList="nodownload noplaybackrate" style="display: none;">
             <source src="./opening/video.mp4" type="video/mp4">
-        </video> -->
+        </video>
 
         <div class="video-area" id="videoArea">
             <div class="start-overlay" id="videoOverlay">
@@ -882,6 +893,7 @@
         const tapToStart = document.getElementById('tapToStart');
         const video = document.getElementById('video');
         const videoSource = video.querySelector('source');
+        const youtubePlayerContainer = document.getElementById('youtubePlayerContainer');
         const videoWrapper = document.getElementById('videoWrapper');
         const videoArea = document.getElementById('videoArea');
         const videoOverlay = document.getElementById('videoOverlay');
@@ -928,6 +940,82 @@
 
         // ===== BUTTONS =====
         let videoSaatIni = 0;
+        let youtubePlayer = null;
+        let youtubeReady = false;
+        let youtubeActive = true;
+        let youtubeStartRequested = false;
+        let youtubeStartAtEnd = false;
+
+        function startYoutubePlayback() {
+            if (!youtubeReady) return;
+
+            if (youtubeStartAtEnd) {
+                const duration = youtubePlayer.getDuration();
+                if (duration > 0) youtubePlayer.seekTo(Math.max(0, duration - 0.1), true);
+            } else {
+                youtubePlayer.seekTo(0, true);
+            }
+
+            youtubeStartRequested = false;
+            youtubeStartAtEnd = false;
+            youtubePlayer.playVideo();
+        }
+
+        function playYoutubeOpening(startAtEnd = false) {
+            youtubeActive = true;
+            video.pause();
+            video.style.display = 'none';
+            youtubePlayerContainer.style.display = 'block';
+            updateVideoArea();
+
+            youtubeStartRequested = true;
+            youtubeStartAtEnd = startAtEnd;
+            startYoutubePlayback();
+        }
+
+        function playLocalVideo(source, scene) {
+            youtubeActive = false;
+            youtubeStartRequested = false;
+            if (youtubeReady) youtubePlayer.pauseVideo();
+            youtubePlayerContainer.style.display = 'none';
+            video.style.display = 'block';
+            videoSource.src = source;
+            videoSaatIni = scene;
+            video.load();
+            video.play().catch((err) => {
+                console.error('Video gagal diputar:', err);
+            });
+        }
+
+        window.onYouTubeIframeAPIReady = () => {
+            youtubePlayer = new YT.Player('youtubePlayer', {
+                videoId: '4c8UxkUBqTg',
+                playerVars: {
+                    playsinline: 1,
+                    controls: 1,
+                    rel: 0
+                },
+                events: {
+                    onReady: () => {
+                        youtubeReady = true;
+                        updateVideoArea();
+                        startYoutubePlayback();
+                    },
+                    onStateChange: (event) => {
+                        if (event.data === YT.PlayerState.ENDED && youtubeActive) {
+                            handleVideoEnded();
+                        }
+                    },
+                    onError: (event) => {
+                        console.error('Video YouTube gagal dimuat. Kode:', event.data);
+                    }
+                }
+            });
+        };
+
+        const youtubeApiScript = document.createElement('script');
+        youtubeApiScript.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(youtubeApiScript);
 
         // ===== DRAG AND DROP =====
         function makeDraggable(el, targetZone, onCorrectDrop, onWrongDrop) {
@@ -1019,11 +1107,8 @@
 
         function checkBothCorrect() {
             if (appleCorrect && orangeCorrect) {
-                videoSource.src = './5/video.mp4'; 
-                videoSaatIni = 5;
                 videoOverlay.classList.remove('choice-mode-4', 'visible');
-                video.load();
-                video.play();
+                playLocalVideo('./5/video.mp4', 5);
             }
         }
 
@@ -1037,14 +1122,16 @@
         );
 
         function updateVideoArea() {
-            const vw = video.videoWidth;
-            const vh = video.videoHeight;
-            if (!vw || !vh) return;
+            const videoRatio = youtubeActive
+                ? 16 / 9
+                : video.videoWidth && video.videoHeight
+                    ? video.videoWidth / video.videoHeight
+                    : 0;
+            if (!videoRatio) return;
 
             const cw = videoWrapper.clientWidth;
             const ch = videoWrapper.clientHeight;
 
-            const videoRatio = vw / vh;
             const containerRatio = cw / ch;
 
             let renderWidth, renderHeight, offsetX, offsetY;
@@ -1065,6 +1152,14 @@
             videoArea.style.top = offsetY + 'px';
             videoArea.style.width = renderWidth + 'px';
             videoArea.style.height = renderHeight + 'px';
+            youtubePlayerContainer.style.left = offsetX + 'px';
+            youtubePlayerContainer.style.top = offsetY + 'px';
+            youtubePlayerContainer.style.width = renderWidth + 'px';
+            youtubePlayerContainer.style.height = renderHeight + 'px';
+
+            if (youtubeReady && youtubeActive) {
+                youtubePlayer.setSize(renderWidth, renderHeight);
+            }
         }
 
         video.addEventListener('loadedmetadata', updateVideoArea);
@@ -1074,13 +1169,13 @@
 
         tapToStart.addEventListener('click', () => {
             tapToStart.style.display = 'none';
-            video.play().catch((err) => {
-                console.error('Video gagal diputar:', err);
+            playYoutubeOpening();
+            backgroundAudio.play().catch((err) => {
+                console.error('Audio latar gagal diputar:', err);
             });
-            backgroundAudio.play()
         }, { once: true });
 
-        video.addEventListener('ended', () => {
+        function handleVideoEnded() {
             if (videoSaatIni === 0) {
                 videoOverlay.classList.remove('choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05',  'choice-mode-10', 'choice-mode-11', 'choice-mode-12', 'choice-mode-2', 'choice-mode-3', 'choice-mode-4', 'choice-mode-5', 'choice-mode-51', 'choice-mode-6', 'choice-mode-61');
                 videoOverlay.classList.add('choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05', 'visible');
@@ -1096,105 +1191,77 @@
             } else if (videoSaatIni === 4) {
                 videoOverlay.classList.add('choice-mode-4', 'visible');
             } else if (videoSaatIni === 5) {
-                videoSource.src = './6/video.mp4';
-                videoSaatIni = 6;
-                video.load();
-                video.play();
+                playLocalVideo('./6/video.mp4', 6);
             } else if (videoSaatIni === 6) {
                 videoOverlay.classList.add('choice-mode-5', 'visible');
             } else if (videoSaatIni === 7) {
                 videoOverlay.classList.add('choice-mode-6', 'visible');
             }
-        });
+        }
+
+        video.addEventListener('ended', handleVideoEnded);
 
         kesehatanButton.addEventListener('click', () => {
-            videoSource.src = './opening1/video.mp4';
-            videoSaatIni = 0.1;
             videoOverlay.classList.remove('choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05');
-            video.load();
-            video.play();
+            playLocalVideo('./opening1/video.mp4', 0.1);
         });
 
         ecommerceButton.addEventListener('click', () => {
-            videoSource.src = './opening2/video.mp4';
-            videoSaatIni = 0.1;
             videoOverlay.classList.remove('choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05');
-            video.load();
-            video.play();
+            playLocalVideo('./opening2/video.mp4', 0.1);
         })
 
         keamananButton.addEventListener('click', () => {
-            videoSource.src = './opening3/video.mp4';
-            videoSaatIni = 0.1;
             videoOverlay.classList.remove('choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05');
-            video.load();
-            video.play();
+            playLocalVideo('./opening3/video.mp4', 0.1);
         })
 
         pertanianButton.addEventListener('click', () => {
-            videoSource.src = './opening4/video.mp4';
-            videoSaatIni = 0.1;
             videoOverlay.classList.remove('choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05');
-            video.load();
-            video.play();
+            playLocalVideo('./opening4/video.mp4', 0.1);
         })
 
         transportasiButton.addEventListener('click', () => {
-            videoSource.src = './opening5/video.mp4';
-            videoSaatIni = 0.1;
             videoOverlay.classList.remove('choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05');
-            video.load();
-            video.play();
+            playLocalVideo('./opening5/video.mp4', 0.1);
         })
 
         openingNext.addEventListener('click', () => {
-            videoSource.src = './1/video.mp4';
-            videoSaatIni = 1;
             videoOverlay.classList.remove('choice-mode-10', 'choice-mode-11', 'choice-mode-12');
-            video.load();
-            video.play();
+            playLocalVideo('./1/video.mp4', 1);
         });
 
         openingTryAgain.addEventListener('click', () => {
             videoOverlay.classList.remove('visible', 'choice-mode-10', 'choice-mode-11', 'choice-mode-12');
-            video.currentTime = 0;
-            video.play().catch((err) => {
-                console.error('Video gagal diputar:', err);
-            });
+            if (youtubeActive) {
+                playYoutubeOpening();
+            } else {
+                video.currentTime = 0;
+                video.play().catch((err) => {
+                    console.error('Video gagal diputar:', err);
+                });
+            }
         })
 
         openingPreviouse.addEventListener('click', () => {
-            videoSource.src = 'https://youtu.be/4c8UxkUBqTg?si=j7q67lkyT4d5V9Wa';
             videoSaatIni = 0;
             videoOverlay.classList.remove(
                 'choice-mode-01', 'choice-mode-02', 'choice-mode-03', 'choice-mode-04', 'choice-mode-05', 'choice-mode-10',
                 'choice-mode-11', 'choice-mode-12'
             );
-            video.addEventListener('loadedmetadata', () => {
-                video.currentTime = Math.max(0, video.duration - 0.1);
-                video.play().catch((err) => {
-                    console.error('Video gagal diputar:', err);
-                });
-            }, { once: true });
-            video.load();
+            playYoutubeOpening(true);
         })
 
         nextButton.addEventListener('click', () => {
-            videoSource.src = './2/video.mp4';
-            videoSaatIni = 2;
             videoOverlay.classList.remove('choice-mode', 'visible');
-            video.load();
-            video.play();
+            playLocalVideo('./2/video.mp4', 2);
         });
 
         appleButton.addEventListener('click', () => {
             falseAudio.remove();
             trueAudio.play();
-            videoSource.src = './3/video.mp4';
-            videoSaatIni = 3;
             videoOverlay.classList.remove('choice-mode', 'choice-mode-3', 'choice-mode-4', 'visible');
-            video.load();
-            video.play();
+            playLocalVideo('./3/video.mp4', 3);
         });
 
         orangeButton.addEventListener('click', () => {
@@ -1204,11 +1271,8 @@
         orangeButton2.addEventListener('click', () => {
             falseAudio.remove();
             trueAudio.play();
-            videoSource.src = './4/video.mp4';
-            videoSaatIni = 4;
             videoOverlay.classList.remove('choice-mode', 'choice-mode-3', 'visible');
-            video.load();
-            video.play();
+            playLocalVideo('./4/video.mp4', 4);
         });
 
         appleButton2.addEventListener('click', () => {
@@ -1218,11 +1282,8 @@
         quiz1button1.addEventListener('click', () => {
             falseAudio.remove();
             trueAudio.play();
-            videoSource.src = './7/video.mp4';
-            videoSaatIni = 7;
             videoOverlay.classList.remove('choice-mode-5', 'choice-mode-51', 'visible');
-            video.load();
-            video.play();
+            playLocalVideo('./7/video.mp4', 7);
         });
 
         quiz1button2.addEventListener('click', () => {
@@ -1232,28 +1293,19 @@
 
         quiz1button3.addEventListener('click', () => {
             videoOverlay.classList.remove('choice-mode-51', 'choice-mode-5', 'visible');
-            videoSource.src = './6/video.mp4';
-            videoSaatIni = 6;
-            video.load();
-            video.play();
+            playLocalVideo('./6/video.mp4', 6);
         });
 
         quiz1button4.addEventListener('click', () => {
             videoOverlay.classList.remove('choice-mode-51', 'choice-mode-5', 'visible');
-            videoSource.src = './opening/video.mp4';
-            videoSaatIni = 0;
-            video.load();
-            video.play();
+            playYoutubeOpening();
         });
 
         quiz2button1.addEventListener('click', () => {
             falseAudio.remove();
             trueAudio.play();
-            videoSource.src = './closing/video.mp4';
-            videoSaatIni = 8;
             videoOverlay.classList.remove('choice-mode-6', 'choice-mode-61', 'visible');
-            video.load();
-            video.play();
+            playLocalVideo('./closing/video.mp4', 8);
         });
 
         quiz2button2.addEventListener('click', () => {
@@ -1263,18 +1315,12 @@
 
         quiz2button3.addEventListener('click', () => {
             videoOverlay.classList.remove('choice-mode-61', 'choice-mode-6', 'visible');
-            videoSource.src = './7/video.mp4';
-            videoSaatIni = 7;
-            video.load();
-            video.play();
+            playLocalVideo('./7/video.mp4', 7);
         });
 
         quiz2button4.addEventListener('click', () => {
             videoOverlay.classList.remove('choice-mode-61',  'choice-mode-6', 'visible');
-            videoSource.src = './opening/video.mp4';
-            videoSaatIni = 0;
-            video.load();
-            video.play();
+            playYoutubeOpening();
         })
     </script>
 </body>
