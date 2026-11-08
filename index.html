@@ -39,12 +39,12 @@
             height: 100%;
         }
 
-        .video-player::-webkit-media-controls,
+        /* .video-player::-webkit-media-controls,
         .video-player::-webkit-media-controls-panel,
         .video-player::-webkit-media-controls-start-playback-button {
             display: none !important;
             -webkit-appearance: none !important;
-        }
+        } */
 
         .video-wrapper {
             position: relative;
@@ -994,10 +994,11 @@
             if (!youtubeReady || !youtubeStartRequested) return;
 
             if (youtubeRequestedVideoId !== youtubeCurrentVideoId) {
-                youtubeCurrentVideoId = youtubeRequestedVideoId;
+                const nextVideoId = youtubeRequestedVideoId;
                 youtubeStartRequested = false;
                 youtubeStartAtEnd = false;
-                youtubePlayer.loadVideoById({ videoId: youtubeCurrentVideoId });
+                youtubePlayer.loadVideoById(nextVideoId);
+                youtubeCurrentVideoId = nextVideoId;
                 return;
             }
 
@@ -1059,7 +1060,8 @@
                     iv_load_policy: 3,
                     cc_load_policy: 0,
                     rel: 0,
-                    enablejsapi: 1
+                    enablejsapi: 1,
+                    modestbranding: 1,
                 },
                 events: {
                     onReady: () => {
@@ -1304,7 +1306,7 @@
 
         openingNext.addEventListener('click', () => {
             videoOverlay.classList.remove('choice-mode-10', 'choice-mode-11', 'choice-mode-12');
-            playYoutubeVideo('F9Jvg8bIUgM', 1, './1/video-last-frame.jpg', true);
+            playYoutubeVideo('F9Jvg8bIUgM', 1, './1/video-last-frame.jpg', false);
         });
 
         openingTryAgain.addEventListener('click', () => {
