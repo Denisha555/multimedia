@@ -1016,6 +1016,7 @@
         function playYoutubeVideo(videoId, scene, localEndFrameSource, startAtEnd) {
             youtubeActive = true;
             videoSaatIni = scene;
+            videoId += '?cc_load_policy=0';
             youtubeRequestedVideoId = videoId;
             youtubeEndFrameSource = localEndFrameSource;
             hideVideoEndFrame();
