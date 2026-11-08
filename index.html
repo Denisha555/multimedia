@@ -997,7 +997,7 @@
                 youtubeCurrentVideoId = youtubeRequestedVideoId;
                 youtubeStartRequested = false;
                 youtubeStartAtEnd = false;
-                youtubePlayer.loadVideoById(youtubeCurrentVideoId);
+                youtubePlayer.loadVideoById({ videoId: youtubeCurrentVideoId });
                 return;
             }
 
@@ -1016,7 +1016,6 @@
         function playYoutubeVideo(videoId, scene, localEndFrameSource, startAtEnd) {
             youtubeActive = true;
             videoSaatIni = scene;
-            videoId += '?cc_load_policy=0';
             youtubeRequestedVideoId = videoId;
             youtubeEndFrameSource = localEndFrameSource;
             hideVideoEndFrame();
@@ -1058,6 +1057,7 @@
                     disablekb: 1,
                     fs: 0,
                     iv_load_policy: 3,
+                    cc_load_policy: 0,
                     rel: 0,
                     enablejsapi: 1
                 },
