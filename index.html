@@ -20,12 +20,12 @@
             object-fit: contain;
         }
 
-        /* .video-player::-webkit-media-controls,
+        .video-player::-webkit-media-controls,
         .video-player::-webkit-media-controls-panel,
         .video-player::-webkit-media-controls-start-playback-button {
             display: none !important;
             -webkit-appearance: none !important;
-        } */
+        }
 
         .video-wrapper {
             position: relative;
@@ -196,6 +196,7 @@
             cursor: pointer;
             appearance: none;
             -webkit-appearance: none;
+
         }
 
         .opening-previouse {
@@ -218,6 +219,27 @@
             cursor: pointer;
             appearance: none;
             -webkit-appearance: none;
+        }
+
+        .openingNext-text,
+        .openingTryAgain-text,
+        .openingPreviouse-text {
+            display: none;
+            position: absolute;
+            top: 155%;
+            transform: translateY(-50%);
+            padding: 6px 10px;
+            border-radius: 6px;
+            background: rgba(10, 25, 45, 0.9);
+            color: white;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .opening-next:hover .openingNext-text,
+        .opening-try-again:hover .openingTryAgain-text,
+        .opening-previouse:hover .openingPreviouse-text {
+            display: block;
         }
 
         .apple-button {
@@ -755,6 +777,7 @@
                             50% { box-shadow: 0 0 0 8px rgba(10, 25, 45, 0.1); }
                         }
                     </style>
+                    <span class="openingNext-text">Video selanjutnya</span>
                 </div>
 
                 <div id="openingTryAgain" class="opening-try-again">
@@ -797,6 +820,7 @@
                             50% { box-shadow: 0 0 0 8px rgba(10, 25, 45, 0.1); }
                         }
                     </style>
+                    <span class="openingTryAgain-text">Ulangi video</span>
                 </div>
 
                 <div id="openingPreviouse" class="opening-previouse">
@@ -823,6 +847,7 @@
                             50% { box-shadow: 0 0 0 8px rgba(10, 25, 45, 0.1); }
                         }
                     </style>
+                    <span class="openingPreviouse-text">Video sebelumnya</span>
                 </div>
 
                 <audio id="backgroundAudio" class="background-audio" loop>
@@ -878,7 +903,7 @@
         const videoOverlay = document.getElementById('videoOverlay');
 
         const backgroundAudio = document.getElementById('backgroundAudio');
-        backgroundAudio.volume = 0.1;
+        backgroundAudio.volume = 0.05;
 
         const trueAudio = document.getElementById('trueAudio');
         const falseAudio = document.getElementById('falseAudio');
